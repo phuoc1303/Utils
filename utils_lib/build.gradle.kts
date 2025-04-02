@@ -1,19 +1,15 @@
 plugins {
-    id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.android.library")
+    id("maven-publish")
 }
 
 android {
     namespace = "com.tvphuoc.utils"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tvphuoc.utils"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -32,6 +28,35 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/phuoc1303/Utils")
+            credentials {
+                username = project.findProperty("GITHUB_USER") as String? ?: System.getenv("GITHUB_USER")
+                password = project.findProperty("GITHUB_TOKEN") as String? ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "com.tvphuoc"
+            artifactId = "utils"
+            version = "1.0.1"
+//            artifact("$buildDir/outputs/aar/utils_lib-release.aar")
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
     }
 }
 
