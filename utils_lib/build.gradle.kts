@@ -50,7 +50,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.tvphuoc"
             artifactId = "utils"
-            version = "1.0.1"
+            version = "1.0.1-fix"
 //            artifact("$buildDir/outputs/aar/utils_lib-release.aar")
 
             afterEvaluate {
